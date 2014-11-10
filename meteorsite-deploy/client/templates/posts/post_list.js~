@@ -1,0 +1,17 @@
+var postsData = [
+{
+title: 'ZeroAnime',
+url: 'http://zeroanime.net/full-series-listing/'
+},
+{
+title: 'League of Legends',
+url: 'http://oce.leagueoflegends.com'
+},
+{
+title: 'The Meteor Book',
+url: 'http://themeteorbook.com'
+}
+];
+Template.postsList.helpers({
+posts: postsData
+});
