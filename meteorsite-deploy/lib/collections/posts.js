@@ -9,7 +9,8 @@ Posts.deny({
 
 Posts.allow({
 	remove: function(userid,doc){
-		var isAuthorOf = (this.author == Meteor.users.find().fetch()[0].username);
+		var isAuthorOf = (doc.author === Meteor.user().username);
+		console.log(doc.author +" ? "+ Meteor.user().username);
 		console.log('isAuthorOf: '+ isAuthorOf + ', ' + 'IsLoggedIn: '+ (!! userid));
 		return (!! userid) && isAuthorOf;
 	}
