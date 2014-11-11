@@ -54,12 +54,3 @@ postInsert: function(postAttributes) {
 	return { _id: postId }; 
 	}
 });
-
-Meteor.methods({
-deletePost: function() {
-	console.log('Deleting Post!');
-    Posts.remove({
-    	_id: this._id
-    });
-	}
-});
