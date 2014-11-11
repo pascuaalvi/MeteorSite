@@ -3,9 +3,16 @@
 		<div class="post-content">
 			<h3><a href="{{url}}">{{title}}</a><span>{{domain}}</span></h3>
 		</div>
+		<div>
+		
+      </div>
 		{{#if isAuthorOfPost}}
-	<a href="{{pathFor 'postDelete' _id}}" class="discuss btn btn-default"> Delete </a>
+	<a href="{{pathFor 'postDelete' _id}}" class="discuss btn btn-danger"> Delete </a>
 	{{/if}}
 	<a href="{{pathFor 'postPage' _id}}" class="discuss btn btn-default"> Discuss </a>
+		<p>
+	        submitted by {{author}}
+	        {{#if isAuthorOfPost}}<a href="{{pathFor 'postEdit'}}">Edit</a>{{/if}}
+      	</p>
 	</div>
 </template>

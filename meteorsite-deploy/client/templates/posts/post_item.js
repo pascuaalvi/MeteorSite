@@ -5,7 +5,7 @@ domain: function() {
 		return a.hostname;
 	},
 isAuthorOfPost: function(){
-		var isAuthorOf = (this.author == Meteor.users.find().fetch()[0].username);
+		var isAuthorOf = (this.userId == Meteor.userId());
 		return isAuthorOf;
 	}
 });

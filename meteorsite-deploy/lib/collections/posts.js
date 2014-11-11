@@ -1,18 +1,23 @@
 Posts = new Mongo.Collection('post');
 
 Posts.deny({
-	insert: function (userid,doc) {
+	insert: function (userId,doc) {
 		// Deny posting if there is no user logged in
-		return !(!! userid);
+		return !(!! userId);
+	},
+	update: function(userId, post, fieldNames) {
+    // may only edit the following two fields:
+    console.log("Array: "+_.without(fieldNames, 'url', 'title').length);
+	return (_.without(fieldNames, 'url', 'title').length > 0); 
 	}
 });
 
 Posts.allow({
-	remove: function(userid,doc){
-		var isAuthorOf = (doc.author === Meteor.user().username);
-		console.log(doc.author +" ? "+ Meteor.user().username);
-		console.log('isAuthorOf: '+ isAuthorOf + ', ' + 'IsLoggedIn: '+ (!! userid));
-		return (!! userid) && isAuthorOf;
+	update: function(userId,doc){
+		return isAuthorOf(userId,doc);
+	},
+	remove: function(userId,doc){
+		return isAuthorOf(userId,doc);
 	}
 });
 

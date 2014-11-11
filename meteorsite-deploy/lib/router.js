@@ -13,11 +13,16 @@ Router.route('postPage', {
     });
 
 Router.route('postSubmit', {
-	path: '/submit'
+		path: '/submit'
 	});
 
 Router.route('postDelete', {
 		path: '/delete/:_id',
+		data: function() { return Posts.findOne(this.params._id); }
+	});
+
+Router.route('/posts/:_id/edit', {
+		name: 'postEdit',
 		data: function() { return Posts.findOne(this.params._id); }
 	});
 
