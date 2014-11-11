@@ -9,6 +9,11 @@ Template.postSubmit.events({
 		flagged:false
 	};
 
+	// Look for errors
+	var errors = validatePost(post); 
+	if (errors.title || errors.url)
+		return Session.set('postSubmitErrors', errors);
+
 	/** 
 	  * Rather than inserting directly into the Posts collection, 
 	  * we’ll call a Method named postInsert
@@ -20,14 +25,27 @@ Template.postSubmit.events({
   	Meteor.call('postInsert', post, function(error, result) { 
   		// display the error to the user and abort
 		if (error) {
-			return alert(error.reason);
+			return throwError(error.reason);
 		}
 
 		if (result.postExists) {
-			alert('This link has already been posted');
+			throwError('This link has already been posted');
 		}
 
       	Router.go('postPage', {_id: result._id});
     });
   	}
+});
+
+Template.postSubmit.created = function() { 
+	Session.set('postSubmitErrors', {});
+}
+
+Template.postSubmit.helpers({ 
+	errorMessage: function(field) {
+		return Session.get('postSubmitErrors')[field]; 
+	},
+	errorClass: function (field) {
+		return !! Session.get('postSubmitErrors')[field] ? 'has-error' : '';
+	} 
 });

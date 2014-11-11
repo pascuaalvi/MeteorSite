@@ -7,8 +7,8 @@ Posts.deny({
 	},
 	update: function(userId, post, fieldNames) {
     // may only edit the following two fields:
-    console.log("Array: "+_.without(fieldNames, 'url', 'title').length);
-	return (_.without(fieldNames, 'url', 'title').length > 0); 
+    var errors = validatePost(post)
+		return errors.title || errors.url; 
 	}
 });
 
@@ -33,6 +33,10 @@ postInsert: function(postAttributes) {
       flagged: Boolean,
     });
 
+    var errors = validatePost(postAttributes); 
+	if (errors.title || errors.url)
+		throw new Meteor.Error('invalid-post','You must set a title and URL for your post');
+
     var postWithSameLink = Posts.findOne({url: postAttributes.url}); 
     if (postWithSameLink) {
 		return {
@@ -54,3 +58,12 @@ postInsert: function(postAttributes) {
 	return { _id: postId }; 
 	}
 });
+
+validatePost = function (post) { 
+	var errors = {};
+	if (!post.title)
+		errors.title = "Please fill in a headline";
+	if (!post.url)
+		errors.url = "Please fill in a URL";
+		return errors; 
+}

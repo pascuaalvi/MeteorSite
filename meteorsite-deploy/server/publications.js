@@ -4,6 +4,5 @@ Meteor.publish('posts', function (author) {
 	}
 	else{
 		return Posts.find({flagged:false});
-}
-
+	}
 });
