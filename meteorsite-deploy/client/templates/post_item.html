@@ -3,6 +3,9 @@
 		<div class="post-content">
 			<h3><a href="{{url}}">{{title}}</a><span>{{domain}}</span></h3>
 		</div>
+		{{#if isAuthorOfPost}}
+	<a href="{{pathFor 'postDelete' _id}}" class="discuss btn btn-default"> Delete </a>
+	{{/if}}
 	<a href="{{pathFor 'postPage' _id}}" class="discuss btn btn-default"> Discuss </a>
 	</div>
 </template>
