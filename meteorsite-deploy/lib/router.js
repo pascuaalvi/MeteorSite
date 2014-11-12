@@ -2,7 +2,9 @@ Router.configure ({
 	layoutTemplate: "layout",
 	loadingTemplate: "loading",
 	notFoundTemplate: "notFound",
-	waitOn: function() { return Meteor.subscribe('posts'); }
+	waitOn: function() { 
+		return [Meteor.subscribe('posts'),Meteor.subscribe('comments'), Meteor.subscribe('notifications')];
+	}
 });
 
 Router.route('postsList',{path:'/'});

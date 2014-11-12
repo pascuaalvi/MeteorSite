@@ -48,6 +48,7 @@ postInsert: function(postAttributes) {
 	}
 
 	var user = Meteor.user();
+
 	var post = _.extend(postAttributes, {
 		userId: user._id, 
 		author: user.username, 

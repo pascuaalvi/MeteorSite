@@ -1,7 +1,15 @@
 <template name="postItem">
 	<div class="post">
 		<div class="post-content">
-			<h3><a href="{{url}}">{{title}}</a><span>{{domain}}</span></h3>
+			<p>
+				<h3><a href="{{url}}">{{title}}</a><span>{{domain}}</span></h3>
+				<br>
+		        submitted by {{author}}
+		         <a href="{{pathFor 'postPage'}}">{{commentsCount}} comments</a>
+		        {{#if isAuthorOfPost}}
+		        	<a href="{{pathFor 'postEdit'}}">Edit</a>
+		        	{{/if}}
+			</p>
 		</div>
 		<div>
 		
@@ -10,9 +18,7 @@
 	<a href="{{pathFor 'postDelete' _id}}" class="discuss btn btn-danger"> Delete </a>
 	{{/if}}
 	<a href="{{pathFor 'postPage' _id}}" class="discuss btn btn-default"> Discuss </a>
-		<p>
-	        submitted by {{author}}
-	        {{#if isAuthorOfPost}}<a href="{{pathFor 'postEdit'}}">Edit</a>{{/if}}
-      	</p>
+		
 	</div>
+
 </template>
