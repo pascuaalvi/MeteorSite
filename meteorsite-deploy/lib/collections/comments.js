@@ -16,7 +16,7 @@ Meteor.methods({
 		throw new Meteor.Error('invalid-comment', 'You must comment on a post');
 	}
 
-	comment = _.extend(commentAttributes, { 
+	comment = _.extend(commentAttributes, {
 		userId: user._id,
 		author: user.username,
 		submitted: new Date()

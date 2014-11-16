@@ -9,6 +9,6 @@ isAuthorOfPost: function(){
 		return isAuthorOf;
 	},
 commentsCount: function() {
-		return Comments.find({postId: this._id}).count(); 
+		return Posts.find(this._id).fetch()[0].commentsCount;
 	}
 });
