@@ -12,6 +12,13 @@ Posts.deny({
 	}
 });
 
+Posts.deny({
+  update: function(userId, post, fieldNames) {
+    // may only edit the following two fields:
+    return (_.without(fieldNames, 'url', 'title').length > 0);
+  }
+});
+
 Posts.allow({
 	update: function(userId,doc){
 		return isAuthorOf(userId,doc);

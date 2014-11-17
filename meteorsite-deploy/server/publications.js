@@ -1,13 +1,12 @@
-Meteor.publish('posts', function (author) {
-	if(author != null){
-		return Posts.find({ flagged:false,author:author });
-	}
-	else{
-		return Posts.find({flagged:false});
-	}
+Meteor.publish('posts', function (options) {
+    check(options, {
+      sort: Object,
+      limit: Number
+    });
+  		return Posts.find({},options);
 });
 
-Meteor.publish('comments', function(postId) {
+Meteor.publish('comments', function (postId) {
 	check(postId, String);
   return Comments.find({postId: postId});
 });
