@@ -1,17 +1,4 @@
 if (Posts.find().count() === 0) {
-		Posts.insert({
-		title: 'Facebook',
-		url: 'http://facebook.com',
-		author: 'mark-zuckerberg',
-		flagged: true
-	});
-	Posts.insert({
-		title: 'Bing',
-		url: 'http:/bing.com',
-		author: 'bill-gates',
-		flagged: true
-	});
-
 	var now = new Date().getTime();
   	// create two users
 	var tomId = Meteor.users.insert({
@@ -33,7 +20,9 @@ if (Posts.find().count() === 0) {
 		author: sacha.profile.name,
 		url: 'http://sachagreif.com/introducing-telescope/', submitted: new Date(now - 7 * 3600 * 1000),
 		flagged:false,
-		commentsCount:2
+		commentsCount:2,
+		upvoters: [],
+		votes: 0
 	});
 
 	for (var i = 0; i < 10; i++) {
@@ -43,7 +32,9 @@ if (Posts.find().count() === 0) {
 			userId: sacha._id,
 			url: 'http://google.com/?q=test-' + i, submitted: new Date(now - i * 3600 * 1000),
 			commentsCount: 0,
-			flagged: false
+			flagged: false,
+			upvoters: [],
+			votes: 0
 	}); }
 
 	Comments.insert({
@@ -68,7 +59,9 @@ if (Posts.find().count() === 0) {
 		url: 'http://meteor.com',
 		submitted: new Date(now - 10 * 3600 * 1000),
 		commentsCount:0,
-		flagged: false
+		flagged: false,
+		upvoters: [],
+		votes: 0
 	});
 
 	Posts.insert({
@@ -78,6 +71,8 @@ if (Posts.find().count() === 0) {
 		url: 'http://themeteorbook.com',
 		submitted: new Date(now - 12 * 3600 * 1000),
 		commentsCount:0,
-		flagged: false
+		flagged: false,
+		upvoters: [],
+		votes: 0
 	});
 }

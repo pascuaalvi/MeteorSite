@@ -14,37 +14,54 @@ PostsListController = RouteController.extend({
 		return parseInt(this.params.postsLimit) || this.increment;
 	},
 	findOptions: function() {
-		return {sort: {submitted: -1}, limit: this.postsLimit()};
+		return {sort: this.sort, limit: this.postsLimit()};
 	},
-	waitOn: function() {
-		return Meteor.subscribe('posts', this.findOptions());
+	subscriptions: function() {
+		this.postsSub = Meteor.subscribe('posts', this.findOptions());
 	},
 	posts: function() {
 		return Posts.find({}, this.findOptions());
 	},
 	data: function() {
 		var hasMore = this.posts().count() === this.postsLimit();
-		var nextPath = this.route.path({
-			postsLimit: this.postsLimit() + this.increment
-		});
 		return {
 		posts: this.posts(),
-		nextPath: hasMore ? nextPath : null
+		ready: this.postsSub.ready,
+		nextPath: hasMore ? this.nextPath() : null
 		};
 	}
+});
+
+NewPostsController = PostsListController.extend({
+	sort: {submitted: -1, _id: -1},
+	nextPath: function() {
+	return Router.routes.newPosts.path({
+			postsLimit: this.postsLimit() + this.increment
+		});
+	}
+});
+
+BestPostsController = PostsListController.extend({
+	sort: {votes: -1, submitted: -1, _id: -1},
+	nextPath: function() {
+		return Router.routes.bestPosts.path({
+			postsLimit: this.postsLimit() + this.increment
+		});
+	}
+});
+
+Router.route('/', {
+  name: 'home',
+  controller: NewPostsController
 });
 
 Router.map( function() {
 	this.route('/posts/:_id', {
 	        name: 'postPage',
 	        waitOn: function() {
-						var postsLimit = parseInt(this.params.postsLimit) || 5;
 						return [
-							Meteor.subscribe('comments', this.params._id),
-							Meteor.subscribe('posts', {
-								sort: {submitted: -1},
-								limit: postsLimit
-							})
+							Meteor.subscribe('singlePost', this.params._id),
+							Meteor.subscribe('comments', this.params._id)
 							];
 					},
 	        data: function() { return Posts.findOne(this.params._id); }
@@ -57,11 +74,7 @@ Router.map( function() {
 	this.route('/posts/:_id/delete', {
 			name: 'postDelete',
 			waitOn: function() {
-				var postsLimit = parseInt(this.params.postsLimit) || 5;
-					return Meteor.subscribe('posts', {
-						sort: {submitted: -1},
-						limit: postsLimit
-					});
+				return Meteor.subscribe('singlePost', this.params._id);
 			},
 			data: function() { return Posts.findOne(this.params._id); }
 		});
@@ -69,19 +82,27 @@ Router.map( function() {
 	this.route('/posts/:_id/edit', {
 			name: 'postEdit',
 			waitOn: function() {
-				var postsLimit = parseInt(this.params.postsLimit) || 5;
-					return Meteor.subscribe('posts', {
-						sort: {submitted: -1},
-						limit:postsLimit
-					});
+				return Meteor.subscribe('singlePost', this.params._id);
 			},
 			data: function() { return Posts.findOne(this.params._id); }
 		});
 
-	// Rerouted to controller
+	this.route('/new/:postsLimit?',{
+			name:'newPosts'
+		});
+
+	this.route('/best/:postsLimit?',{
+			name:'bestPosts'
+		});
+
+	// Redundant as the '/new/:postsLimit?'
+	// is now the default setting of the website
+	// Under the guise of '/'
+	/*
 	this.route('/:postsLimit?',{
 			name:'postsList'
 		});
+	*/
 });
 
 var requireLoginDelete = function() {
